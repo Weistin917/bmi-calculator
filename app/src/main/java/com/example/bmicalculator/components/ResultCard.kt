@@ -1,3 +1,4 @@
+// Result display card
 package com.example.bmicalculator.components
 
 import androidx.compose.foundation.background
@@ -15,10 +16,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.bmicalculator.R
 
+/*
+* Params:
+* The result value.
+* */
 @Composable
 fun ResultCard(
     result: Float
 ) {
+    // Card color
     val cardClr = CardColors(
         containerColor = Color.White,
         contentColor = Color.Black,
@@ -31,7 +37,9 @@ fun ResultCard(
             .height(250.dp),
         colors = cardClr
     ){
+        // Checks the value of the result for the interpretation
         when {
+            // Error state for incorrect input
             result == -1f ->
                 ErrorContent(
                     message = "Entered values must be numeric.",
@@ -70,6 +78,11 @@ fun ResultCard(
     }
 }
 
+// Content for a correct result
+/*
+* Params:
+* Circle color, result value, message to display and ID for the image to show.
+* */
 @Composable
 fun ResultContent(
     color: Color,
@@ -86,6 +99,7 @@ fun ResultContent(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
+            // A circle indicating the state of the result
             Box(
                 modifier = Modifier
                     .size(75.dp)
@@ -106,6 +120,7 @@ fun ResultContent(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Bottom
         ) {
+            // Image to indicate the state of the result
             Image(
                 painter = painterResource(id = imageID),
                 contentDescription = null,
@@ -116,6 +131,11 @@ fun ResultContent(
     }
 }
 
+// Content to show when an error occurs.
+/*
+* Params:
+* The message to show and ID of the image to show.
+* */
 @Composable
 fun ErrorContent(
     message: String,

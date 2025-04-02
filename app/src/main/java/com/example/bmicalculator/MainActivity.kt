@@ -1,3 +1,4 @@
+// Main Activity
 package com.example.bmicalculator
 
 import android.os.Bundle
@@ -26,8 +27,10 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+// App content
 @Composable
 fun BmiCalculatorContent() {
+    // States: inputs by the user and the bmi calculation result
     var userWeight by remember { mutableStateOf("") }
     var userHeight by remember { mutableStateOf("") }
     var weightUnit by remember { mutableStateOf("kg") }
@@ -61,6 +64,7 @@ fun BmiCalculatorContent() {
                         .fillMaxWidth()
                         .padding(16.dp)
                 ) {
+                    // Form to receive user's weight and height
                     ParametersForm(
                         inputWeight = userWeight,
                         inputHeight = userHeight,
@@ -84,6 +88,7 @@ fun BmiCalculatorContent() {
                         .fillMaxWidth()
                         .padding(16.dp)
                 ) {
+                    // Card showing the result
                     ResultCard(result = result)
                 }
             }

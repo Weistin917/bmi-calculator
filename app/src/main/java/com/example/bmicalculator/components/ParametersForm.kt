@@ -1,3 +1,4 @@
+// Parameters Form
 package com.example.bmicalculator.components
 
 import androidx.compose.runtime.*
@@ -10,6 +11,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
+/*
+* Params:
+* Values for the entered weight and height, and its respective dimensional units.
+* Functions to call on when any of the states change.
+* Function to calculate the BMI.
+* */
 @Composable
 fun ParametersForm(
     inputWeight: String,
@@ -22,7 +29,7 @@ fun ParametersForm(
     setHeightUnit: (String) -> Unit,
     onCalculate: () -> Unit
 ) {
-
+    // color for the button
     val btnColor = ButtonColors(
         containerColor = Color(162, 133, 87),
         contentColor = Color.White,
@@ -30,12 +37,14 @@ fun ParametersForm(
         disabledContainerColor = Color(33, 31, 26)
     )
     Column {
+        // Input fields with dimensional unit selector for each parameter
         Row( modifier = Modifier.fillMaxWidth() ) {
             OutlinedTextField(
                 value = inputWeight,
                 onValueChange = { onWeightChange(it) },
                 label = { Text(text = "Weight ($weightUnit)") }
             )
+            // Selector of dimensional unit
             UnitSelect(listOf("lb", "kg"), setWeightUnit)
         }
 
@@ -47,11 +56,13 @@ fun ParametersForm(
                 onValueChange = { onHeightChange(it) },
                 label = { Text(text = "Height ($heightUnit)") }
             )
+            // Selector of dimensional unit
             UnitSelect(listOf("cm", "m"), setHeightUnit)
         }
 
         Spacer(modifier = Modifier.height(8.dp))
 
+        // Calculate button
         Button(
             onClick = onCalculate,
             modifier = Modifier.fillMaxWidth(),
@@ -63,11 +74,13 @@ fun ParametersForm(
     }
 }
 
+// A dropdown select for the dimensional unit
 @Composable
 fun UnitSelect(
     options: List<String>,
     setUnit: (String) -> Unit
 ) {
+    // State that manages the expansion of the select.
     var expanded by remember { mutableStateOf(false) }
     Box(
         modifier = Modifier.padding(8.dp)
