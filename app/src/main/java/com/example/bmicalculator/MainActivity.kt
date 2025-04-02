@@ -8,12 +8,16 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Warning
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.bmicalculator.ui.theme.BmiCalculatorAppTheme
 import com.example.bmicalculator.components.*
+import kotlin.math.pow
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,6 +32,12 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun BmiCalculatorContent() {
+    var userWeight by remember { mutableStateOf("") }
+    var userHeight by remember { mutableStateOf("") }
+    var weightUnit by remember { mutableStateOf("kg") }
+    var heightUnit by remember { mutableStateOf("cm") }
+    var result by remember { mutableFloatStateOf(0f) }
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize(),
@@ -55,7 +65,23 @@ fun BmiCalculatorContent() {
                         .fillMaxWidth()
                         .padding(16.dp)
                 ) {
-                    ParametersForm()
+                    ParametersForm(
+                        inputWeight = userWeight,
+                        inputHeight = userHeight,
+                        weightUnit = weightUnit,
+                        heightUnit = heightUnit,
+                        onWeightChange = { newWeight -> userWeight = newWeight },
+                        onHeightChange = { newHeight -> userHeight = newHeight },
+                        setWeightUnit = { selectedUnit -> weightUnit = selectedUnit },
+                        setHeightUnit = { selectedUnit -> heightUnit = selectedUnit },
+                        onCalculate = { calculateBMI(
+                            weight = userWeight,
+                            height = userHeight,
+                            weightUnit = weightUnit,
+                            heightUnit = heightUnit,
+                            setResult = { res -> result = res }
+                        ) }
+                    )
                 }
                 Row(
                     modifier = Modifier
@@ -66,6 +92,27 @@ fun BmiCalculatorContent() {
                 }
             }
         }
+    }
+}
+
+fun calculateBMI(
+    weight: String,
+    height: String,
+    weightUnit: String,
+    heightUnit: String,
+    setResult: (Float) -> Unit
+) {
+    val floatRegex = Regex("\\d+(\\.\\d+)?")
+    if (floatRegex.matches(weight) && floatRegex.matches(height)) {
+        val h = if (heightUnit == "cm") height.toFloat() / 100 else height.toFloat()
+        val w = when (weightUnit) {
+            "lb" -> weight.toFloat() / 2.205f
+            "kg" -> weight.toFloat()
+            else -> 0f
+        }
+        setResult((w / h.pow(2)))
+    } else {
+        setResult(-1f)
     }
 }
 

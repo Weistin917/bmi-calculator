@@ -11,7 +11,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ParametersForm() {
+fun ParametersForm(
+    inputWeight: String,
+    inputHeight: String,
+    weightUnit: String,
+    heightUnit: String,
+    onWeightChange: (String) -> Unit,
+    onHeightChange: (String) -> Unit,
+    setWeightUnit: (String) -> Unit,
+    setHeightUnit: (String) -> Unit,
+    onCalculate: () -> Unit
+) {
 
     val btnColor = ButtonColors(
         containerColor = Color(162, 133, 87),
@@ -22,28 +32,28 @@ fun ParametersForm() {
     Column {
         Row( modifier = Modifier.fillMaxWidth() ) {
             OutlinedTextField(
-                value = "",
-                onValueChange = {},
-                label = { Text(text = "Weight ()") }
+                value = inputWeight,
+                onValueChange = { onWeightChange(it) },
+                label = { Text(text = "Weight ($weightUnit)") }
             )
-            UnitSelect(listOf("lb", "kg"))
+            UnitSelect(listOf("lb", "kg"), setWeightUnit)
         }
 
         Spacer(modifier = Modifier.height(8.dp))
 
         Row( modifier = Modifier.fillMaxWidth() ) {
             OutlinedTextField(
-                value = "",
-                onValueChange = {},
-                label = { Text(text = "Height ()") }
+                value = inputHeight,
+                onValueChange = { onHeightChange(it) },
+                label = { Text(text = "Height ($heightUnit)") }
             )
-            UnitSelect(listOf("cm", "m"))
+            UnitSelect(listOf("cm", "m"), setHeightUnit)
         }
 
         Spacer(modifier = Modifier.height(8.dp))
 
         Button(
-            onClick = {},
+            onClick = onCalculate,
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(5.dp),
             colors = btnColor
@@ -55,7 +65,8 @@ fun ParametersForm() {
 
 @Composable
 fun UnitSelect(
-    options: List<String>
+    options: List<String>,
+    setUnit: (String) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
     Box(
@@ -71,7 +82,10 @@ fun UnitSelect(
             options.forEach { option ->
                 DropdownMenuItem(
                     text = { Text(text = option) },
-                    onClick = {}
+                    onClick = {
+                        setUnit(option)
+                        expanded = false
+                    }
                 )
             }
         }
