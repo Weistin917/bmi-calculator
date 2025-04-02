@@ -8,16 +8,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Warning
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.bmicalculator.ui.theme.BmiCalculatorAppTheme
 import com.example.bmicalculator.components.*
-import kotlin.math.pow
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,31 +84,10 @@ fun BmiCalculatorContent() {
                         .fillMaxWidth()
                         .padding(16.dp)
                 ) {
-                    ResultCard()
+                    ResultCard(result = result)
                 }
             }
         }
-    }
-}
-
-fun calculateBMI(
-    weight: String,
-    height: String,
-    weightUnit: String,
-    heightUnit: String,
-    setResult: (Float) -> Unit
-) {
-    val floatRegex = Regex("\\d+(\\.\\d+)?")
-    if (floatRegex.matches(weight) && floatRegex.matches(height)) {
-        val h = if (heightUnit == "cm") height.toFloat() / 100 else height.toFloat()
-        val w = when (weightUnit) {
-            "lb" -> weight.toFloat() / 2.205f
-            "kg" -> weight.toFloat()
-            else -> 0f
-        }
-        setResult((w / h.pow(2)))
-    } else {
-        setResult(-1f)
     }
 }
 
